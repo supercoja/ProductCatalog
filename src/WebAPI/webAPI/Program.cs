@@ -1,5 +1,6 @@
 using ProductCatalog.Data.Fake;
 using ProductCatalog.Domain;
+using webAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ICategoryRepository, FakeCategoryRepository>();
 builder.Services.AddSingleton<IProductRepository, FakeProductRepository>();
+
+builder.Services.AddSingleton<IOrderRepository, FakeOrderRepository>();
+builder.Services.AddSingleton<IOrderQueue, InMemoryOrderQueue>();
+builder.Services.AddScoped<IOrderProcessor, OrderProcessor>();
+
+builder.Services.AddHostedService<OrderProcessingService>();
 
 var app = builder.Build();
 
