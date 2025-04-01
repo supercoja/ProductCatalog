@@ -35,7 +35,8 @@ public class CategoriesController : Controller
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
-    { 
+    {
+        throw new Exception();
         var categories = await _categoryRepository.GetAllAsync();
         return Ok(categories);
     }

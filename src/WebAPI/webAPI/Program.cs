@@ -23,6 +23,8 @@ builder.Services.AddHostedService<OrderProcessingService>();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionHandler>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

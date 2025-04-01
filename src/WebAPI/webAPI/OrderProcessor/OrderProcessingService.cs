@@ -26,7 +26,6 @@ public class OrderProcessingService : BackgroundService
             {
                 _logger.LogInformation("Dequeued order {OrderId} for processing", order.Id);
                     
-                // Create a scope to resolve scoped services
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var orderProcessor = scope.ServiceProvider.GetRequiredService<IOrderProcessor>();
@@ -34,7 +33,7 @@ public class OrderProcessingService : BackgroundService
                 }
             }
                 
-            // Delay to avoid tight loop
+            // Delay to demonstrate 
             await Task.Delay(100, stoppingToken);
         }
             
