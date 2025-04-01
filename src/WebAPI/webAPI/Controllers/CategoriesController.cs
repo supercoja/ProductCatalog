@@ -1,20 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using ProductCatalog.Domain;
 
-namespace webAPI.Controllers;
-
-
 [Route("api/categories")]
 public class CategoriesController : Controller
 {
-    public CategoriesController(ICategoryRepository categoryRepository, ILogger<ICategoryRepository> logger)
+    public CategoriesController(ICategoryRepository categoryRepository, ILogger<CategoriesController> logger)
     {
         _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     private readonly ICategoryRepository _categoryRepository;
-    private readonly ILogger<ICategoryRepository> _logger;
+    private readonly ILogger<CategoriesController> _logger;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)

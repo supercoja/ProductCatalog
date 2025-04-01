@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using ProductCatalog.Domain;
-using webAPI.Controllers;
 
 namespace ProductCatalog.WebAPI.Testes;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +10,12 @@ public class CategoryControllerTests
 {
     private readonly Mock<ICategoryRepository> _mockRepo;
     private readonly CategoriesController _controller;
-    private readonly Mock<ILogger<ICategoryRepository>> _loggerMock;
+    private readonly Mock<ILogger<CategoriesController>> _loggerMock;
 
     public CategoryControllerTests()
     {
         _mockRepo = new Mock<ICategoryRepository>();
-        _loggerMock = new Mock<ILogger<ICategoryRepository>>();
+        _loggerMock = new Mock<ILogger<CategoriesController>>();
         _controller = new CategoriesController(_mockRepo.Object, _loggerMock.Object);
     }
 
@@ -66,7 +65,8 @@ public class CategoryControllerTests
         var result = await _controller.GetById(Guid.NewGuid());
 
         // Assert
-        Assert.IsType<NotFoundResult>(result);
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal("Category not found.", notFoundResult.Value);
     }
 
     [Fact]
@@ -91,13 +91,16 @@ public class CategoryControllerTests
     {
         // Arrange
         var category = Category.Create("Updated Category").Value;
-        _mockRepo.Setup(repo => repo.UpdateAsync(category)).Returns(Task.CompletedTask);
+
+        _mockRepo.Setup(repo => repo.GetByIdAsync(category.Id)).ReturnsAsync(category);
+        _mockRepo.Setup(repo => repo.UpdateAsync(It.IsAny<Category>())).Returns(Task.CompletedTask);
 
         // Act
         var result = await _controller.Update(category.Id, category.Name);
 
         // Assert
         Assert.IsType<NoContentResult>(result);
+        _mockRepo.Verify(repo => repo.UpdateAsync(It.IsAny<Category>()), Times.Once);
     }
 
     [Fact]
@@ -105,6 +108,9 @@ public class CategoryControllerTests
     {
         // Arrange
         var categoryId = Guid.NewGuid();
+        var category = Category.Create("Category to Delete").Value;
+
+        _mockRepo.Setup(repo => repo.GetByIdAsync(categoryId)).ReturnsAsync(category);
         _mockRepo.Setup(repo => repo.DeleteAsync(categoryId)).Returns(Task.CompletedTask);
 
         // Act
@@ -112,5 +118,6 @@ public class CategoryControllerTests
 
         // Assert
         Assert.IsType<NoContentResult>(result);
+        _mockRepo.Verify(repo => repo.DeleteAsync(categoryId), Times.Once); // Ensure
     }
 }
