@@ -9,14 +9,14 @@ namespace ProductCatalog.WebAPI.Testes;
 public class ProductControllerTests
 {
      private readonly Mock<IProductRepository> _mockProductRepo;
-    private readonly Mock<IRepository<Category>> _mockCategoryRepo;
+    private readonly Mock<ICategoryRepository> _mockCategoryRepo;
     private readonly Mock<ILogger<ProductController>> _mockLogger;
     private readonly ProductController _controller;
 
     public ProductControllerTests()
     {
         _mockProductRepo = new Mock<IProductRepository>();
-        _mockCategoryRepo = new Mock<IRepository<Category>>();
+        _mockCategoryRepo = new Mock<ICategoryRepository>();
         _mockLogger = new Mock<ILogger<ProductController>>();
         _controller = new ProductController(_mockProductRepo.Object, _mockCategoryRepo.Object, _mockLogger.Object);
     }

@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSingleton<ICategoryRepository, FakeCategoryRepository>();
-
+builder.Services.AddSingleton<IProductRepository, FakeProductRepository>();
 
 var app = builder.Build();
 

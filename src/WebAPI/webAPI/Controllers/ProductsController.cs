@@ -8,10 +8,10 @@ namespace webAPI;
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IRepository<Category> _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductRepository productRepository, IRepository<Category> categoryRepository, ILogger<ProductController> logger)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ILogger<ProductController> logger)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
